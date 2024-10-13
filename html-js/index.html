@@ -1,0 +1,223 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Examen 1</title>
+    <style>
+
+        *
+        {
+            font-family: Arial;
+            text-align: center;
+        }
+
+        .galeria
+        {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+
+        .imagen 
+        {
+            padding: 1em;
+            margin: 20px;
+            width: 300px;
+            height: 300px;
+            text-align: center;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            border-radius: 10%;
+        }
+
+        .imagen img
+        {
+            width: 200px;
+            height: 200px;
+        }
+
+        .imagen p
+        {
+            margin-top: 10px;
+            font-size: 16px;
+        }
+
+        .imagen button
+        {
+            margin-top: 10px;
+            padding: 10px 20px;
+            font-size: 14px;
+        }
+
+        img
+        {
+            max-width: 100%;
+        }
+
+        div
+        {
+            padding: 0,5em;
+        }
+
+        tr,td
+        {
+            border: 1px solid black;
+            padding: 8px;
+        }
+
+        table
+        {
+            margin: 0 auto;
+            border-collapse: collapse;
+            width: 50%;
+        }
+
+        body
+        {
+            background-color: white;
+        }
+        .input-group
+        {
+            display: none;
+            margin-top: 10px;
+            text-align: center;
+        }
+
+        .result
+        {
+            margin-top: 20px;
+            font-size: 18px;
+            font-weight: bold;
+            color: green;
+        }
+
+        header
+        {   
+            border: 1px solid black;
+            background-color: greenyellow;
+            padding: 1em;
+            display: flex;
+            justify-content: flex-end;
+            width: 98%;
+        }
+
+        div
+        {
+            display: flex;
+            justify-content: flex-start;
+        }
+
+    </style>
+
+    <script src="script.js"></script>
+</head>
+<header>
+    <button id="loginButton" onclick="LogIn()">Iniciar Sesion</button>
+    <button id="registerButton" onclick="SignIn()">Registrarse</button>
+    <button id="logoutButton" style="display:none" onclick="CerrarSesion()">Cerrar Sesión</button>
+</header>
+<body>
+    <div id="bienvenidaUsuario">Por favor inicie sesión para mostrar sus puntos</div>
+    <div id="puntosTotalesUsuario"></div>
+    <h1>Bienvenidos al Sistema de Gestión de Reciclaje Vecinal</h1>
+    <p>¡Le recordamos que todo reciclaje que haga le da puntos!</p>
+    <p>⬇ Aqui está la tabla de puntos por objeto reciclado ⬇</p>
+    <br>
+    <table>
+        <tr>
+            <td>Clasificación</td>
+            <td>Puntos</td>
+        </tr>
+        <tr>
+            <td>Vidrio</td>
+            <td>3 puntos x Kg</td>
+        </tr>
+        <tr>
+            <td>Plásticos, latas y bricks</td>
+            <td>2 puntos x Kg</td>
+        </tr>
+        <tr>
+            <td>Papel y cartón</td>
+            <td>2 puntos x Kg</td>
+        </tr>
+        <tr>
+            <td>Orgánicos</td>
+            <td>1 punto x Kg</td>
+        </tr>
+        <tr>
+            <td>No reciclables</td>
+            <td>1 punto x Kg</td>
+        </tr>
+    </table>
+    <h2>¿Quieres reciclar?</h2>
+    <h3>¡Selecciona el tipo de reciclaje y empieza a ganar puntos!</h3>
+    <form onsubmit="CalcularPuntos(event)">
+        <label for="Vidrio">Vidrio</label>
+        <input type="checkbox" id="Vidrio" onclick="HabilitarInput(this, 'inputVidrio')">
+        <div id ="inputVidrio" class="input-group">
+            <label for="KgVidrio">Introduce los Kg:</label>
+            <input type="number" id="KgVidrio" min="0" step="0.1">
+        </div>
+        <br>
+
+        <label for="PlLaBr">Plásticos, latas y bricks</label>
+        <input type="checkbox" id="PlLaBr" onclick="HabilitarInput(this, 'inputPlLaBr')">
+        <div id ="inputPlLaBr" class="input-group">
+            <label for="KgPlLaBr">Introduce los Kg:</label>
+            <input type="number" id="KgPlLaBr" min="0" step="0.1">
+        </div>
+        <br>
+
+        <label for="PapCar">Papel y cartón</label>
+        <input type="checkbox" id="PapCar" onclick="HabilitarInput(this, 'inputPapCar')">
+        <div id ="inputPapCar" class="input-group">
+            <label for="KgPapCar">Introduce los Kg:</label>
+            <input type="number" id="KgPapCar" min="0" step="0.1">
+        </div>
+        <br>
+
+        <label for="Organico">Orgánicos</label>
+        <input type="checkbox" id="Organico" onclick="HabilitarInput(this, 'inputOrganico')">
+        <div id ="inputOrganico" class="input-group">
+            <label for="KgOrganico">Introduce los Kg:</label>
+            <input type="number" id="KgOrganico" min="0" step="0.1">
+        </div>
+        <br>
+
+        <label for="NoRec">No reciclables</label>
+        <input type="checkbox" id="NoRec" onclick="HabilitarInput(this, 'inputNoRec')">
+        <div id ="inputNoRec" class="input-group">
+            <label for="KgNoRec">Introduce los Kg:</label>
+            <input type="number" id="KgNoRec" min="0" step="0.1">
+        </div>
+        <br><br>
+
+        <button type="submit">Terminar</button>
+    </form>
+
+    <div class="result" id="resultadoPuntos">Total de puntos acumulados: 0</div>
+    <br>
+    <br>
+    <h1>¡Premios disponibles!</h1>
+    <div class="galeria">
+        <div class="imagen" alt="Tiendamia">
+            <img src="logo-tm-ogimage-2019-min.png">
+            <p>Tarjeta de regalo de 10000 colones en Tiendamia - 100 puntos</p>
+            <button onclick="canjearPremio(100)">Canjear</button>
+        </div>
+        <div class="imagen" alt="Canasta">
+            <img src="image-removebg-preview (66).png">
+            <p>Canasta de víveres premium - 250 puntos</p>
+            <button onclick="canjearPremio(250)">Canjear</button>    
+        </div>
+        <div class="imagen" alt="Parrila">
+            <img src="image-removebg-preview (65).png">
+            <p>Parrilla a carbón Expertgrill - 500 puntos</p>
+            <button onclick="canjearPremio(500)">Canjear</button>
+        </div> 
+    </div>
+
+</body>
+</html>
